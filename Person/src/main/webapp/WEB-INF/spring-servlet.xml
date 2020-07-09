@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx 
+  http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+ 
+    <context:component-scan base-package="app.infy.person" />
+   <mvc:annotation-driven />
+   <tx:annotation-driven/>
+   
+   
+    <bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+      <property name="dataSource" ref="dataSource" />
+      <property name="packagesToScan" value="app.infy.person" />
+      <property name="jpaVendorAdapter">
+         <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+      </property>
+      <property name="jpaProperties">
+         <props>
+            <prop key="hibernate.hbm2ddl.auto">update</prop>
+            <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+             <prop key="hibernate.show_sql">true</prop>
+         </props>
+      </property>
+   </bean>
+   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+      <property name="url" 
+   value="jdbc:mysql://localhost:3306/person_db?useUnicode=true&amp;useJDBCCompliantTimezoneShift=trueuseLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+   
+      <property name="username" value="user" />
+      <property name="password" value="password" />
+   </bean>
+   
+   <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+      <property name="entityManagerFactory" ref="entityManagerFactoryBean" />
+   </bean>
+ 
+ 
+</beans>
